@@ -38,12 +38,13 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
 
     auto inputs = jsonObject["inputs"];
 
-    qDebug() << "Is array?" << inputs.isArray();
-    qDebug() << "values" << inputs.isArray();
+//    qDebug() << "Is array?" << inputs.isArray();
+//    qDebug() << "values" << inputs.isArray();
 
     auto array = inputs.toArray();
 
     QStringList _values;
+    QStringList _incorrectValues;
     for (const auto& val : array)
     {
         if (val.isDouble())
@@ -51,16 +52,20 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
 //            qDebug() << val.toDouble();
             _values.append(QString::number(val.toDouble()));
         }
+        else
+        {
+            _incorrectValues.append(val.toString());
+        }
     }
     //    qDebug() << _values;
 
     std::sort(_values.begin(), _values.end(),
               [](const QString& val1, const QString& val2) {return val1.toDouble() < val2.toDouble();});
 
-    for (const auto& val : _values)
-    {
-        qDebug() << val;
-    }
+//    for (const auto& val : _values)
+//    {
+//        qDebug() << val;
+//    }
 
     QStringListModel* stringListModel = new QStringListModel(_values);
     ui->listView->setModel(stringListModel);
