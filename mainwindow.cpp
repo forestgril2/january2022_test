@@ -6,6 +6,7 @@
 #include "QJsonObject"
 #include "QJsonArray"
 #include "QStringListModel"
+#include "QModelIndex"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -85,6 +86,18 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
 
     const auto median_c = median(sortedValues);
     ui->lineEdit->setText(QString::number(median_c, 'g', 2));
+
+//    ui->listView->setSelectionModel(new QSelectionModel(stringListModel));
+
+
+    for (int i=0; i<_values.size(); ++i)
+    {
+        if (qFuzzyCompare(_values[i].toDouble(), median_c))
+        {
+            QModelIndex medianIndex = stringListModel->index(i,0);
+            ui->listView->selectionModel()->select(medianIndex,QItemSelectionModel::Select);
+        }
+    }
 }
 
 double MainWindow::median(std::vector<double> sortedValues)
