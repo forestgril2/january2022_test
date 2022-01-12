@@ -15,7 +15,10 @@ QT_END_NAMESPACE
                  MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
+             private slots:
+                 void on_actionOpen_json_file_with_inputs_triggered();
+
+             private:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
