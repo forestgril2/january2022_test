@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "QFileDialog"
+#include "QByteArray"
+#include "QJsonDocument"
+#include "QJsonObject"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -18,7 +21,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
+    QString filePath = QFileDialog::getOpenFileName(this,
     tr("Open Image"), "D:/Projects/january2022_test", tr("Image Files (*.json)"));
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning("Could not open input file.");
+        return;
+    }
+    QByteArray data = file.readAll();
+    QJsonDocument doc(QJsonDocument::fromJson(data));
+
+    auto jsonObject = doc.object();
+
+    const auto& inputs = jsonObject["inputs"];
+
+    qDebug() << inputs;
 }
 
