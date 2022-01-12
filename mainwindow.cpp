@@ -51,6 +51,14 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
             _values.append(QString::number(val.toDouble()));
         }
     }
-    qDebug() << array;
+    //    qDebug() << _values;
+
+    std::sort(_values.begin(), _values.end(),
+              [](const QString& val1, const QString& val2) {return val1.toDouble() < val2.toDouble();});
+
+    for (const auto& val : _values)
+    {
+        qDebug() << val;
+    }
 }
 
