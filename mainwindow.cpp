@@ -50,43 +50,50 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
     QStringList _incorrectValues;
     for (const auto& val : array)
     {
-        if (val.isDouble())
+        if (val.isDouble() &&
+            val.toDouble() > -70 &&
+            val.toDouble() < 2.28E9)
         {
 //            qDebug() << val.toDouble();
             _values.append(QString::number(val.toDouble()));
         }
         else
         {
-            _incorrectValues.append(val.toString());
+            qDebug() << val;
+            _incorrectValues.append(QString::number(val.toDouble()));
         }
     }
-    //    qDebug() << _values;
+
+    qDebug() << _incorrectValues;
 
     std::sort(_values.begin(), _values.end(),
               [](const QString& val1, const QString& val2) {return val1.toDouble() < val2.toDouble();});
 
-    ui->listView->setModel(new QStringListModel(_values));
-//    ui->listView_2->setModel(new QStringListModel(_incorrectValues));
+    QStringListModel* stringListModel = new QStringListModel(_values);
+    ui->listView->setModel(stringListModel);
+
+    QStringListModel* stringListModel2 = new QStringListModel(_incorrectValues);
+    ui->listView_2->setModel(stringListModel2);
 
 
-//    std::vector<double> sortedValues;
-//    sortedValues.reserve(_values.size());
-//    for (const auto& val : _values)
-//    {
-//        sortedValues.push_back(val.toDouble());
-//    }
+    std::vector<double> sortedValues;
+    sortedValues.reserve(_values.size());
+    for (const auto& val : _values)
+    {
+        sortedValues.push_back(val.toDouble());
+    }
 
-//    qDebug() << " ### " << median(sortedValues);
+    qDebug() << " ### " << median(sortedValues);
 }
 
-double MainWindow::median(std::vector<double>& sortedValues)
+double MainWindow::median(std::vector<double> sortedValues)
 {
     if (sortedValues.size() == 0)
         return 0;
 
     size_t n = sortedValues.size() / 2;
     if (sortedValues.size() % 2 == 0)
-        return (sortedValues[n] + sortedValues[n+1])/2;
+        return (sortedValues[n] + sortedValues[n-1])/2;
     else
         return sortedValues[n];
 }
@@ -100,7 +107,9 @@ bool MainWindow::median_test()
     assert(median(t2) == 0.0);
 
     std::vector<double> t3{0,1.0};
-    assert(qFuzzyCompare(median(t2), 0.5));
+    assert(qFuzzyCompare(median(t3), 0.5));
+
+    assert(qFuzzyCompare(median(std::vector<double>{0, 1.0, 2.0}), 1.0));
 
     return true;
 }

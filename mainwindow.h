@@ -20,7 +20,7 @@ private slots:
 
 private:
 
-    static double median(std::vector<double>& sortedValues);
+    static double median(std::vector<double> sortedValues);
 
 #ifndef NDEBUG
     static bool median_test();
