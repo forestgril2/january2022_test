@@ -83,7 +83,7 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
         sortedValues.push_back(val.toDouble());
     }
 
-    qDebug() << " ### " << median(sortedValues);
+    ui->lineEdit->setText(QString::number(median(sortedValues)));
 }
 
 double MainWindow::median(std::vector<double> sortedValues)
