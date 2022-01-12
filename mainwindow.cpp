@@ -83,7 +83,8 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
         sortedValues.push_back(val.toDouble());
     }
 
-    ui->lineEdit->setText(QString::number(median(sortedValues)));
+    const auto median_c = median(sortedValues);
+    ui->lineEdit->setText(QString::number(median_c, 'g', 2));
 }
 
 double MainWindow::median(std::vector<double> sortedValues)
@@ -93,7 +94,7 @@ double MainWindow::median(std::vector<double> sortedValues)
 
     size_t n = sortedValues.size() / 2;
     if (sortedValues.size() % 2 == 0)
-        return (sortedValues[n] + sortedValues[n-1])/2;
+        return ((double)sortedValues[n] + (double)sortedValues[n-1])/(double)2;
     else
         return sortedValues[n];
 }
