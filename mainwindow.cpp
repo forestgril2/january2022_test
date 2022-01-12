@@ -5,6 +5,7 @@
 #include "QJsonDocument"
 #include "QJsonObject"
 #include "QJsonArray"
+#include "QStringListModel"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -60,5 +61,8 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
     {
         qDebug() << val;
     }
+
+    QStringListModel* stringListModel = new QStringListModel(_values);
+    ui->listView->setModel(stringListModel);
 }
 
