@@ -22,6 +22,10 @@ private:
 
     static double median(std::vector<double>& sortedValues);
 
+#ifndef NDEBUG
+    static bool median_test();
+#endif
+
     Ui::MainWindow *ui;
 
 

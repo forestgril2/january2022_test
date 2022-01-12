@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+#ifndef NDEBUG
+    median_test();
+#endif
     ui->setupUi(this);
 }
 
@@ -62,21 +65,43 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
     std::sort(_values.begin(), _values.end(),
               [](const QString& val1, const QString& val2) {return val1.toDouble() < val2.toDouble();});
 
+    ui->listView->setModel(new QStringListModel(_values));
+//    ui->listView_2->setModel(new QStringListModel(_incorrectValues));
+
+
+//    std::vector<double> sortedValues;
+//    sortedValues.reserve(_values.size());
 //    for (const auto& val : _values)
 //    {
-//        qDebug() << val;
+//        sortedValues.push_back(val.toDouble());
 //    }
 
-    QStringListModel* stringListModel = new QStringListModel(_values);
-    ui->listView->setModel(stringListModel);
-
-
+//    qDebug() << " ### " << median(sortedValues);
 }
 
 double MainWindow::median(std::vector<double>& sortedValues)
 {
+    if (sortedValues.size() == 0)
+        return 0;
+
     size_t n = sortedValues.size() / 2;
-    nth_element(sortedValues.begin(), sortedValues.begin()+n, sortedValues.end());
-    return sortedValues[n];
+    if (sortedValues.size() % 2 == 0)
+        return (sortedValues[n] + sortedValues[n+1])/2;
+    else
+        return sortedValues[n];
+}
+
+bool MainWindow::median_test()
+{
+    std::vector<double> t1;
+    assert(qFuzzyIsNull(median(t1)));
+
+    std::vector<double> t2{0};
+    assert(median(t2) == 0.0);
+
+    std::vector<double> t3{0,1.0};
+    assert(qFuzzyCompare(median(t2), 0.5));
+
+    return true;
 }
 
