@@ -4,6 +4,7 @@
 #include "QByteArray"
 #include "QJsonDocument"
 #include "QJsonObject"
+#include "QJsonArray"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -34,8 +35,22 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
 
     auto jsonObject = doc.object();
 
-    const auto& inputs = jsonObject["inputs"];
+    auto inputs = jsonObject["inputs"];
 
-    qDebug() << inputs;
+    qDebug() << "Is array?" << inputs.isArray();
+    qDebug() << "values" << inputs.isArray();
+
+    auto array = inputs.toArray();
+
+    QStringList _values;
+    for (const auto& val : array)
+    {
+        if (val.isDouble())
+        {
+//            qDebug() << val.toDouble();
+            _values.append(QString::number(val.toDouble()));
+        }
+    }
+    qDebug() << array;
 }
 
