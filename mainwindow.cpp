@@ -64,5 +64,14 @@ void MainWindow::on_actionOpen_json_file_with_inputs_triggered()
 
     QStringListModel* stringListModel = new QStringListModel(_values);
     ui->listView->setModel(stringListModel);
+
+
+}
+
+double MainWindow::median(std::vector<double>& sortedValues)
+{
+    size_t n = sortedValues.size() / 2;
+    nth_element(sortedValues.begin(), sortedValues.begin()+n, sortedValues.end());
+    return sortedValues[n];
 }
 
